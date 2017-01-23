@@ -1,5 +1,5 @@
 ## Compatible shell commands
-- shelljs (npm: shelljs)
+- shelljs (npm: shelljs) https://github.com/shelljs/shelljs
 
 ## Browserify Dev Webservers
 
