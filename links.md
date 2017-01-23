@@ -1,6 +1,9 @@
 ## Compatible shell commands
 - shelljs (npm: shelljs) https://github.com/shelljs/shelljs
 
+## Code formatter
+- prettier (npm: prettier) https://github.com/jlongster/prettier
+
 ## Browserify Dev Webservers
 - budo (npm: budo)
 - bankai (npm: baikai)
