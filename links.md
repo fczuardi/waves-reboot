@@ -1,8 +1,13 @@
+## Compatible shell commands
+- shelljs (npm: shelljs)
 
 ## Browserify Dev Webservers
 
 - budo (npm: budo)
 - bankai (npm: baikai)
+
+# Bundler
+- browserify (npm: browserify)
 
 # #HTML
 
