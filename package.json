@@ -8,11 +8,12 @@
   "license": "AGPL-3",
   "scripts": {
     "start": "budo --live index.js",
-	 "mkdir": "mkdir -p dist",
-     "build": "browserify index.js --outfile dist/bundle.js"
+    "mkdir": "node tasks/mkdir.js",
+    "build": "browserify index.js --outfile dist/bundle.js"
   },
   "devDependencies": {
     "browserify": "^13.3.0",
-    "budo": "^9.4.5"
+    "budo": "^9.4.5",
+    "shelljs": "^0.7.6"
   }
 }
