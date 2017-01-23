@@ -1,0 +1,9 @@
+{
+  "name": "webapp-livecoding",
+  "version": "0.1.0",
+  "description": "a new project boilerplate Jan 2017",
+  "main": "index.js",
+  "repository": "git@github.com:fczuardi/webapp-livecoding.git",
+  "author": "Fabricio C Zuardi <fabricio@fabricio.org>",
+  "license": "AGPL-3"
+}
