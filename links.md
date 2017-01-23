@@ -2,7 +2,6 @@
 - shelljs (npm: shelljs) https://github.com/shelljs/shelljs
 
 ## Browserify Dev Webservers
-
 - budo (npm: budo)
 - bankai (npm: baikai)
 
@@ -10,7 +9,7 @@
 - browserify (npm: browserify)
 
 # #HTML
-
+- bel (npm: bel) https://github.com/shama/bel
 
 
 ## Physics
