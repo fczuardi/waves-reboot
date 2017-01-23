@@ -6,7 +6,13 @@
   "repository": "git@github.com:fczuardi/webapp-livecoding.git",
   "author": "Fabricio C Zuardi <fabricio@fabricio.org>",
   "license": "AGPL-3",
+  "scripts": {
+    "start": "budo --live index.js",
+	 "mkdir": "mkdir -p dist",
+     "build": "browserify index.js --outfile dist/bundle.js"
+  },
   "devDependencies": {
+    "browserify": "^13.3.0",
     "budo": "^9.4.5"
   }
 }
