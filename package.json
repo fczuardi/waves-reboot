@@ -5,5 +5,8 @@
   "main": "index.js",
   "repository": "git@github.com:fczuardi/webapp-livecoding.git",
   "author": "Fabricio C Zuardi <fabricio@fabricio.org>",
-  "license": "AGPL-3"
+  "license": "AGPL-3",
+  "devDependencies": {
+    "budo": "^9.4.5"
+  }
 }
