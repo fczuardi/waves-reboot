@@ -8,7 +8,7 @@
   "license": "AGPL-3",
   "scripts": {
     "start": "budo --live index.js",
-	"format": "prettier --write",
+    "format": "prettier --write",
     "mkdir": "node tasks/mkdir.js",
     "build": "browserify index.js --outfile dist/bundle.js"
   },
@@ -19,6 +19,7 @@
     "shelljs": "^0.7.6"
   },
   "dependencies": {
-    "bel": "^4.5.1"
+    "bel": "^4.5.1",
+    "pixi.js": "^4.3.4"
   }
 }

@@ -23,6 +23,7 @@
 ## WebGL Rendering
 
 - Pixi (npm: pixi.js) https://github.com/pixijs/pixi.js
+  - API Docs: http://pixijs.download/release/docs/index.html
 - Three
 
 

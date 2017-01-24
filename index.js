@@ -1,12 +1,19 @@
-var html = require("bel");
+var Pixi = require("pixi.js");
 var config = require("./config");
 
-console.log(config);
+var { Graphics, Application } = Pixi;
 
-var mybutton = html`
-<canvas style="top:0; left:0; background-color:yellow; height: 100%; width:100%; position: absolute;"></canvas>
-`;
+var app = new Application();
+var canvas = app.view;
+var stage = app.stage;
 
-console.log(mybutton);
+var myCircle = new Graphics()
+  .lineStyle(1, 0x00ff00)
+  .beginFill(0xff0000)
+  .drawCircle(50, 50, 25);
 
-document.body.appendChild(mybutton);
+myCircle.alpha = 0.5;
+
+stage.addChild(myCircle);
+
+document.body.appendChild(canvas);
