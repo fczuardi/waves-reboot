@@ -2,7 +2,7 @@ var Pixi = require("pixi.js");
 
 var { Graphics, Application } = Pixi;
 var app = new Application();
-var { view, stage, renderer } = app;
+var { view, stage, renderer, ticker } = app;
 
 var myCircle = new Graphics()
   .lineStyle(1, 0x00ff00)
@@ -24,6 +24,11 @@ sprite.x = 640;
 stage.addChild(myCircle);
 stage.addChild(myRectangle);
 stage.addChild(sprite);
+
+ticker.add(function(t){
+    var nextX = stage.x - t;
+    stage.setTransform(nextX);
+});
 
 
 renderer.autoResize = true;
