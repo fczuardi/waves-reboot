@@ -1,10 +1,7 @@
 var Pixi = require("pixi.js");
-var config = require("./config");
 
 var { Graphics, Application } = Pixi;
-
 var app = new Application();
-
 var { view, stage, renderer } = app;
 
 var myCircle = new Graphics()
@@ -14,21 +11,31 @@ var myCircle = new Graphics()
 
 myCircle.alpha = 0.5;
 
+var myRectangle = new Graphics()
+    .beginFill(0x00cc00)
+    .drawRect(50, 200, 2000, 20);
+
+// Pixi.loader.add('boat', 'bunny.png').load(function(loader, resources) {
+
+let sprite = new PIXI.Sprite.fromImage('./boat-small.png');
+
+sprite.x = 640;
+
 stage.addChild(myCircle);
+stage.addChild(myRectangle);
+stage.addChild(sprite);
+
 
 renderer.autoResize = true;
 renderer.backgroundColor = 0xcccccc;
-
 view.style = `
 top: 0;
 left: 0;
 position: absolute;
 `;
-
 var resizeCanvas = function() {
   renderer.resize(window.screen.width, window.screen.height);
 };
-
 document.body.appendChild(view);
 resizeCanvas();
 window.addEventListener("resize", function(e) {
