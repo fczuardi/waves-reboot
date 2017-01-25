@@ -12,12 +12,11 @@ var myCircle = new Graphics()
 myCircle.alpha = 0.5;
 
 var myRectangle = new Graphics()
-    .beginFill(0x00cc00)
-    .drawRect(50, 200, 2000, 20);
+  .beginFill(0x00cc00)
+  .drawRect(50, 200, 2000, 20);
 
 // Pixi.loader.add('boat', 'bunny.png').load(function(loader, resources) {
-
-let sprite = new PIXI.Sprite.fromImage('./boat-small.png');
+let sprite = new PIXI.Sprite.fromImage("./boat-small.png");
 
 sprite.x = 640;
 
@@ -25,11 +24,10 @@ stage.addChild(myCircle);
 stage.addChild(myRectangle);
 stage.addChild(sprite);
 
-ticker.add(function(t){
-    var nextX = stage.x - t;
-    stage.setTransform(nextX);
+ticker.add(function(t) {
+  var nextX = stage.x - t;
+  stage.setTransform(nextX);
 });
-
 
 renderer.autoResize = true;
 renderer.backgroundColor = 0xcccccc;
