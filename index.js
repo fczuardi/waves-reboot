@@ -9,15 +9,6 @@ var { view, stage, renderer, ticker } = new Application();
 
 var boat = new Boat({ image: "./boat-small.png" });
 
-// gets the coordinates for the center of the screen
-function screenCenter() {
-  return [ window.screen.width / 2, window.screen.height / 2 ];
-}
-
-// center the stage
-var center = screenCenter();
-stage.setTransform(...center);
-
 //p2
 // gravity 0 world to simulate a top view of our lake
 var world = new World({ gravity: [ 0, 0 ] });
@@ -26,9 +17,22 @@ var world = new World({ gravity: [ 0, 0 ] });
 stage.addChild(boat.sprite);
 world.addBody(boat.body);
 
-var fixedTimeStep = 1 / 60;
+// gets the coordinates for the center of the screen
+function screenCenter() {
+  return [ window.screen.width / 2, window.screen.height / 2 ];
+}
 
-boat.body.applyImpulse([ 20, 0 ]);
+function onClick(e) {
+  var direction = e.screenX < window.screen.width ? 1 : -1;
+  boat.body.applyImpulse([ direction * 20, 0 ]);
+}
+
+// center the stage
+var center = screenCenter();
+
+stage.setTransform(...center);
+
+var fixedTimeStep = 1 / 60;
 
 //game loop
 ticker.add(function step(t) {
@@ -53,3 +57,4 @@ resizeCanvas();
 window.addEventListener("resize", function(e) {
   resizeCanvas();
 });
+window.addEventListener("click", onClick);
