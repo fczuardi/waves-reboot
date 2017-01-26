@@ -2,12 +2,27 @@ var Pixi = require("pixi.js");
 var P2 = require("p2");
 var Boat = require("./src/boat");
 
-var { Graphics, Application } = Pixi;
+
+
+
+var { Graphics, Application, Point } = Pixi;
 var { World } = P2;
 
 var { view, stage, renderer, ticker } = new Application();
 
 var boat = new Boat({ image: "./boat-small.png" });
+
+function debugShape(body, stage){
+    var vertices = body.shapes[0].vertices;
+    var pixiVertices = vertices.map(v => {
+        return new Point(v[0], v[1]);
+    })
+    var debugShape = new Graphics()
+        .lineStyle(1, 0x00ff00)
+        .beginFill(0xff0000, 0.5)
+        .drawPolygon(pixiVertices);
+    stage.addChild(debugShape);
+}
 
 //p2
 // gravity 0 world to simulate a top view of our lake
@@ -16,6 +31,8 @@ var world = new World({ gravity: [ 0, 0 ] });
 // add boat to stage and world
 stage.addChild(boat.sprite);
 world.addBody(boat.body);
+
+debugShape(boat.body, stage);
 
 // gets the coordinates for the center of the screen
 function screenCenter() {
