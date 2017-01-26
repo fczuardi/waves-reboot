@@ -1,29 +1,50 @@
 var Pixi = require("pixi.js");
+var P2 = require("p2");
 
 var { Graphics, Application } = Pixi;
+var { World, Body, Circle, Plane } = P2;
+
+// pixi
 var app = new Application();
 var { view, stage, renderer, ticker } = app;
 
-// Pixi.loader.add('boat', 'bunny.png').load(function(loader, resources) {
-let sprite = new PIXI.Sprite.fromImage("./boat-small.png");
+// looks of our boat
+var sprite = new PIXI.Sprite.fromImage("./boat-small.png");
 
-stage.addChild(sprite);
+// set anchor point to the center of the sprite
+sprite.anchor.x = 0.5;
+sprite.anchor.y = 0.5;
 
+// gets the coordinates for the center of the screen
 function screenCenter() {
   return [ window.screen.width / 2, window.screen.height / 2 ];
 }
 
+// center the stage
 var center = screenCenter();
-
 stage.setTransform(...center);
 
-sprite.anchor.x = 0.5;
-sprite.anchor.y = 0.5;
+// add boat to stage
+stage.addChild(sprite);
 
-// ticker.add(function(t) {
-// var nextX = stage.x - t;
-// stage.setTransform(nextX);
-// });
+//p2
+// gravity 0 world to simulate a top view of our lake
+var world = new World({ gravity: [ 0.1, 0 ] });
+
+// body of our boat
+var boatBody = new Body({ mass: 1, position: [ 0, 3 ] });
+world.addBody(boatBody);
+
+var fixedTimeStep = 1 / 60;
+
+//game loop
+ticker.add(function step(t) {
+  var deltaTime = t * 1000 / ticker.FPS;
+  world.step(fixedTimeStep, deltaTime);
+  sprite.setTransform(...boatBody.interpolatedPosition);
+  renderer.render(stage);
+});
+
 renderer.autoResize = true;
 renderer.backgroundColor = 0xcccccc;
 view.style = `
@@ -39,3 +60,4 @@ resizeCanvas();
 window.addEventListener("resize", function(e) {
   resizeCanvas();
 });
+
