@@ -29,7 +29,7 @@ stage.addChild(sprite);
 
 //p2
 // gravity 0 world to simulate a top view of our lake
-var world = new World({ gravity: [ 0.1, 0 ] });
+var world = new World({ gravity: [ 0, 0 ] });
 
 // body of our boat
 var boatBody = new Body({ mass: 1, position: [ 0, 3 ] });
@@ -37,9 +37,11 @@ world.addBody(boatBody);
 
 var fixedTimeStep = 1 / 60;
 
+boatBody.applyImpulse([ 20, 0 ]);
+
 //game loop
 ticker.add(function step(t) {
-  var deltaTime = t * 1000 / ticker.FPS;
+  var deltaTime = 1000 * t / ticker.FPS;
   world.step(fixedTimeStep, deltaTime);
   sprite.setTransform(...boatBody.interpolatedPosition);
   renderer.render(stage);
@@ -60,4 +62,3 @@ resizeCanvas();
 window.addEventListener("resize", function(e) {
   resizeCanvas();
 });
-
