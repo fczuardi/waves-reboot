@@ -1,19 +1,13 @@
 var Pixi = require("pixi.js");
 var P2 = require("p2");
+var Boat = require("./src/boat");
 
 var { Graphics, Application } = Pixi;
-var { World, Body, Circle, Plane } = P2;
+var { World } = P2;
 
-// pixi
-var app = new Application();
-var { view, stage, renderer, ticker } = app;
+var { view, stage, renderer, ticker } = new Application();
 
-// looks of our boat
-var sprite = new PIXI.Sprite.fromImage("./boat-small.png");
-
-// set anchor point to the center of the sprite
-sprite.anchor.x = 0.5;
-sprite.anchor.y = 0.5;
+var boat = new Boat({ image: "./boat-small.png" });
 
 // gets the coordinates for the center of the screen
 function screenCenter() {
@@ -24,26 +18,23 @@ function screenCenter() {
 var center = screenCenter();
 stage.setTransform(...center);
 
-// add boat to stage
-stage.addChild(sprite);
-
 //p2
 // gravity 0 world to simulate a top view of our lake
 var world = new World({ gravity: [ 0, 0 ] });
 
-// body of our boat
-var boatBody = new Body({ mass: 1, position: [ 0, 3 ] });
-world.addBody(boatBody);
+// add boat to stage and world
+stage.addChild(boat.sprite);
+world.addBody(boat.body);
 
 var fixedTimeStep = 1 / 60;
 
-boatBody.applyImpulse([ 20, 0 ]);
+boat.body.applyImpulse([ 20, 0 ]);
 
 //game loop
 ticker.add(function step(t) {
   var deltaTime = 1000 * t / ticker.FPS;
   world.step(fixedTimeStep, deltaTime);
-  sprite.setTransform(...boatBody.interpolatedPosition);
+  boat.sprite.setTransform(...boat.body.interpolatedPosition);
   renderer.render(stage);
 });
 
