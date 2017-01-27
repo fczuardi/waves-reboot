@@ -21,8 +21,12 @@ function screenCenter() {
 }
 
 function onClick(e) {
-  var direction = e.screenX < window.screen.width ? 1 : -1;
-  boat.body.applyImpulse([ direction * 20, 0 ]);
+  var x = e.clientX;
+  // var y = e.clientY;
+  var width = window.screen.width;
+  var direction = x < width / 2 ? 1 : -1;
+  var impulsePoint = [0, 0]
+  boat.body.applyImpulse([ direction * 20, 0 ], impulsePoint);
 }
 
 // center the stage
@@ -37,7 +41,8 @@ ticker.add(function step(t) {
   var deltaTime = 1000 * t / ticker.FPS;
   world.step(fixedTimeStep, deltaTime);
   boats.forEach(function updateSpritePosition(boat) {
-    boat.sprite.setTransform(...boat.body.interpolatedPosition);
+    var [x, y] = boat.body.interpolatedPosition
+    boat.sprite.setTransform( x, y, 1, 1, boat.body.angle);
   });
   renderer.render(stage);
 });
