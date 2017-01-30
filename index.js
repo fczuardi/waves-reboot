@@ -25,7 +25,7 @@ function onClick(e) {
   // var y = e.clientY;
   var width = window.screen.width;
   var direction = x < width / 2 ? 1 : -1;
-  var impulsePoint = [0, 0]
+  var impulsePoint = [ 0, 0 ];
   boat.body.applyImpulse([ direction * 20, 0 ], impulsePoint);
 }
 
@@ -41,8 +41,8 @@ ticker.add(function step(t) {
   var deltaTime = 1000 * t / ticker.FPS;
   world.step(fixedTimeStep, deltaTime);
   boats.forEach(function updateSpritePosition(boat) {
-    var [x, y] = boat.body.interpolatedPosition
-    boat.sprite.setTransform( x, y, 1, 1, boat.body.angle);
+    var [ x, y ] = boat.body.interpolatedPosition;
+    boat.sprite.setTransform(x, y, 1, 1, boat.body.angle);
   });
   renderer.render(stage);
 });
