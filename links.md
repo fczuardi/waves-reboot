@@ -26,4 +26,6 @@
   - API Docs: http://pixijs.download/release/docs/index.html
 - Three
 
+## Assets
 
+- https://openclipart.org/detail/165974/checkers-board

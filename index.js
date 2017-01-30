@@ -2,7 +2,7 @@ var Pixi = require("pixi.js");
 var P2 = require("p2");
 var Boat = require("./src/boat");
 
-var { Graphics, Application, Point } = Pixi;
+var { Graphics, Application, Point, Sprite } = Pixi;
 var { World } = P2;
 
 var { view, stage, renderer, ticker } = new Application();
@@ -10,6 +10,12 @@ var { view, stage, renderer, ticker } = new Application();
 //p2
 // gravity 0 world to simulate a top view of our lake
 var world = new World({ gravity: [ 0, 0 ] });
+
+// debug background
+var bg = new Sprite.fromImage("./bg.png");
+bg.setTransform(-200, -200, 1, 1);
+
+stage.addChild(bg);
 
 var boat = new Boat({ stage, world });
 var boat2 = new Boat({ x: 100, stage, world });
@@ -29,11 +35,6 @@ function onClick(e) {
   boat.body.applyImpulse([ direction * 20, 0 ], impulsePoint);
 }
 
-// center the stage
-var center = screenCenter();
-
-stage.setTransform(...center);
-
 var fixedTimeStep = 1 / 60;
 
 //game loop
@@ -44,6 +45,15 @@ ticker.add(function step(t) {
     var [ x, y ] = boat.body.interpolatedPosition;
     boat.sprite.setTransform(x, y, 1, 1, boat.body.angle);
   });
+
+  // code to recenter stage goes here
+  var [ screenCenterX, screenCenterY ] = screenCenter();
+  var [ boatX, boatY ] = boats[0].body.interpolatedPosition;
+  var stageX = screenCenterX - boatX;
+  var stageY = screenCenterY - boatY;
+
+  stage.setTransform(stageX, stageY);
+
   renderer.render(stage);
 });
 
