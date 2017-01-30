@@ -1,15 +1,17 @@
+var ease = require("eases/cubic-out");
 var Pixi = require("pixi.js");
 var P2 = require("p2");
 var Boat = require("./src/boat");
 
 var { Graphics, Application, Point, Sprite } = Pixi;
-var { World } = P2;
+var { World, Body } = P2;
 
 var { view, stage, renderer, ticker } = new Application();
 
 //p2
 // gravity 0 world to simulate a top view of our lake
 var world = new World({ gravity: [ 0, 0 ] });
+world.sleepMode = World.BODY_SLEEPING;
 
 // debug background
 var bg = new Sprite.fromImage("./bg.png");
@@ -37,6 +39,17 @@ function onClick(e) {
 
 var fixedTimeStep = 1 / 60;
 
+var stageCenteringTime = 2000;
+var stageX = stage.x;
+var stageX0 = stage.x;
+var stageY = stage.y;
+var stageY0 = stage.y;
+var deltaX = 0;
+var deltaY = 0;
+var stageT = 0;
+
+var lastBoatSleepState = boats[0].body.sleepState;
+
 //game loop
 ticker.add(function step(t) {
   var deltaTime = 1000 * t / ticker.FPS;
@@ -46,16 +59,33 @@ ticker.add(function step(t) {
     boat.sprite.setTransform(x, y, 1, 1, boat.body.angle);
   });
 
+  var currentBoatSleepState = boats[0].body.sleepState;
+  if (currentBoatSleepState !== lastBoatSleepState) {
+    if (currentBoatSleepState === Body.SLEEPY) {
+      centerStage();
+    }
+    lastBoatSleepState = currentBoatSleepState;
+  }
+  if (stageT < stageCenteringTime) {
+    var p = ease(stageT / stageCenteringTime);
+    stage.setTransform(stageX0 + deltaX * p, stageY0 + deltaY * p);
+    stageT = stageT + deltaTime;
+  }
+  renderer.render(stage);
+});
+
+function centerStage() {
   // code to recenter stage goes here
   var [ screenCenterX, screenCenterY ] = screenCenter();
   var [ boatX, boatY ] = boats[0].body.interpolatedPosition;
-  var stageX = screenCenterX - boatX;
-  var stageY = screenCenterY - boatY;
-
-  stage.setTransform(stageX, stageY);
-
-  renderer.render(stage);
-});
+  stageX = screenCenterX - boatX;
+  stageY = screenCenterY - boatY;
+  stageX0 = stage.position.x;
+  stageY0 = stage.position.y;
+  stageT = 0;
+  deltaX = stageX - stageX0;
+  deltaY = stageY - stageY0;
+}
 
 renderer.autoResize = true;
 renderer.backgroundColor = 0xcccccc;
