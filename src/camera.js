@@ -7,18 +7,21 @@ class Camera {
     this.stage = stage;
     this.subject = subject;
     this.t = 0;
+    this.isMoving = false;
     this.stageX0 = stage.x;
     this.stageY0 = stage.y;
   }
 
   startCameraFollow() {
     this.t = 0;
+    this.isMoving = true;
     this.stageX0 = this.stage.x;
     this.stageY0 = this.stage.y;
   }
 
   cameraFollowStep(deltaTime) {
     if (this.t > stageCenteringTime) {
+      this.isMoving = false;
       return null;
     }
     var p = ease(this.t / stageCenteringTime);

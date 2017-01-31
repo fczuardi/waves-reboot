@@ -1,7 +1,11 @@
+## Quarta 1 Fev
+
+- [ ] start exploring "sensors" in p2
+
 ## Terca 31 Jan
 
 - [x] refactor camera/stage steps into separate module
-- [ ] start exploring "sensors" in p2
+- [x] camera recenter if boat leaves screen
 
 ## Segunda 30 Jan
 

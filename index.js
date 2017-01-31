@@ -15,7 +15,7 @@ world.sleepMode = World.BODY_SLEEPING;
 
 // debug background
 var bg = new Sprite.fromImage("./bg.png");
-bg.setTransform(-200, -200, 1, 1);
+bg.setTransform(0, 0, 1, 1);
 
 stage.addChild(bg);
 
@@ -38,6 +38,15 @@ var fixedTimeStep = 1 / 60;
 
 var lastBoatSleepState = boats[0].body.sleepState;
 
+function isInsideViewport(subject) {
+  var relativeX = subject.interpolatedPosition[0] + stage.x;
+  var relativeY = subject.interpolatedPosition[1] + stage.y;
+  return relativeX > 0 &&
+    relativeX < window.screen.width &&
+    relativeY > 0 &&
+    relativeY < window.screen.height;
+}
+
 //game loop
 ticker.add(function step(t) {
   var deltaTime = 1000 * t / ticker.FPS;
@@ -53,6 +62,9 @@ ticker.add(function step(t) {
       camera.startCameraFollow();
     }
     lastBoatSleepState = currentBoatSleepState;
+  }
+  if (!isInsideViewport(boat.body) && !camera.isMoving) {
+    camera.startCameraFollow();
   }
   camera.cameraFollowStep(deltaTime);
   renderer.render(stage);
