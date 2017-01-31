@@ -1,7 +1,7 @@
-var ease = require("eases/cubic-out");
 var Pixi = require("pixi.js");
 var P2 = require("p2");
 var Boat = require("./src/boat");
+var Camera = require("./src/camera");
 
 var { Graphics, Application, Point, Sprite } = Pixi;
 var { World, Body } = P2;
@@ -23,10 +23,7 @@ var boat = new Boat({ stage, world });
 var boat2 = new Boat({ x: 100, stage, world });
 var boats = [ boat, boat2 ];
 
-// gets the coordinates for the center of the screen
-function screenCenter() {
-  return [ window.screen.width / 2, window.screen.height / 2 ];
-}
+var camera = new Camera(stage, boat.body);
 
 function onClick(e) {
   var x = e.clientX;
@@ -38,15 +35,6 @@ function onClick(e) {
 }
 
 var fixedTimeStep = 1 / 60;
-
-var stageCenteringTime = 2000;
-var stageX = stage.x;
-var stageX0 = stage.x;
-var stageY = stage.y;
-var stageY0 = stage.y;
-var deltaX = 0;
-var deltaY = 0;
-var stageT = 0;
 
 var lastBoatSleepState = boats[0].body.sleepState;
 
@@ -62,30 +50,13 @@ ticker.add(function step(t) {
   var currentBoatSleepState = boats[0].body.sleepState;
   if (currentBoatSleepState !== lastBoatSleepState) {
     if (currentBoatSleepState === Body.SLEEPY) {
-      centerStage();
+      camera.startCameraFollow();
     }
     lastBoatSleepState = currentBoatSleepState;
   }
-  if (stageT < stageCenteringTime) {
-    var p = ease(stageT / stageCenteringTime);
-    stage.setTransform(stageX0 + deltaX * p, stageY0 + deltaY * p);
-    stageT = stageT + deltaTime;
-  }
+  camera.cameraFollowStep(deltaTime);
   renderer.render(stage);
 });
-
-function centerStage() {
-  // code to recenter stage goes here
-  var [ screenCenterX, screenCenterY ] = screenCenter();
-  var [ boatX, boatY ] = boats[0].body.interpolatedPosition;
-  stageX = screenCenterX - boatX;
-  stageY = screenCenterY - boatY;
-  stageX0 = stage.position.x;
-  stageY0 = stage.position.y;
-  stageT = 0;
-  deltaX = stageX - stageX0;
-  deltaY = stageY - stageY0;
-}
 
 renderer.autoResize = true;
 renderer.backgroundColor = 0xcccccc;

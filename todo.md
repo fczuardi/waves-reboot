@@ -1,6 +1,7 @@
 ## Terca 31 Jan
 
-- [ ] refactor camera/stage steps into separate module
+- [x] refactor camera/stage steps into separate module
+- [ ] start exploring "sensors" in p2
 
 ## Segunda 30 Jan
 
