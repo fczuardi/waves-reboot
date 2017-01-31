@@ -1,9 +1,10 @@
 var Pixi = require("pixi.js");
 var P2 = require("p2");
 var Boat = require("./src/boat");
+var Ripple = require("./src/ripple");
 var Camera = require("./src/camera");
 
-var { Graphics, Application, Point, Sprite } = Pixi;
+var { Graphics, Application, Sprite } = Pixi;
 var { World, Body } = P2;
 
 var { view, stage, renderer, ticker } = new Application();
@@ -15,9 +16,17 @@ world.sleepMode = World.BODY_SLEEPING;
 
 // debug background
 var bg = new Sprite.fromImage("./bg.png");
+bg.anchor.x = 0.5;
+bg.anchor.y = 0.5;
 bg.setTransform(0, 0, 1, 1);
 
 stage.addChild(bg);
+
+var testRipple = new Ripple(-50, 0, 200, ticker, stage, world);
+
+world.on("beginContact", function(payload) {
+  console.log({ payload });
+});
 
 var boat = new Boat({ stage, world });
 var boat2 = new Boat({ x: 100, stage, world });

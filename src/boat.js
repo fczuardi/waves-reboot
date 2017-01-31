@@ -12,6 +12,7 @@ var Boat = function({ image, x, y, stage, world } = {}) {
   sprite.anchor.x = 0.5;
   sprite.anchor.y = 0.5;
   body.fromPolygon(polygon);
+  body.label = "Boat";
   this.sprite = sprite;
   this.body = body;
   if (stage) {
