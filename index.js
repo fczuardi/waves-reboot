@@ -22,10 +22,9 @@ bg.setTransform(0, 0, 1, 1);
 
 stage.addChild(bg);
 
-var testRipple = new Ripple(-50, 0, 200, ticker, stage, world);
-
 world.on("beginContact", function(payload) {
   console.log({ payload });
+  // boat.body.applyImpulse([ direction * 20, 0 ], impulsePoint);
 });
 
 var boat = new Boat({ stage, world });
@@ -35,12 +34,10 @@ var boats = [ boat, boat2 ];
 var camera = new Camera(stage, boat.body);
 
 function onClick(e) {
-  var x = e.clientX;
-  // var y = e.clientY;
-  var width = window.screen.width;
-  var direction = x < width / 2 ? 1 : -1;
-  var impulsePoint = [ 0, 0 ];
-  boat.body.applyImpulse([ direction * 20, 0 ], impulsePoint);
+  var x = e.clientX - stage.x;
+  var y = e.clientY - stage.y;
+  var i = [ Math.floor(Math.random() * 3) ];
+  var ripple = new Ripple(x, y, i, ticker, stage, world);
 }
 
 var fixedTimeStep = 1 / 60;
@@ -94,4 +91,4 @@ resizeCanvas();
 window.addEventListener("resize", function(e) {
   resizeCanvas();
 });
-window.addEventListener("click", onClick);
+window.addEventListener("click", onClick.bind({ stage, ticker, world }));

@@ -5,10 +5,11 @@ var P2 = require("p2");
 var { Body, Circle } = P2;
 var { Graphics } = Pixi;
 
-var animationTime = 10;
+var maxRadiuses = [ 200, 400, 600 ];
+var animationTimes = [ 5, 6, 7 ];
 
 class Ripple {
-  constructor(x, y, maxRadius, ticker, stage, world) {
+  constructor(x, y, type, ticker, stage, world) {
     var body = new Body({ collisionResponse: false, position: [ x, y ] });
     body.addShape(new Circle({ radius: 3 }));
     var sprite = new Graphics();
@@ -16,9 +17,9 @@ class Ripple {
     this.sprite = sprite;
     this.body = body;
     this.stage = stage;
+    this.type = type;
     this.ticker = ticker;
     this.world = world;
-    this.maxRadius = maxRadius;
     this.t = 0;
     this.stage.addChild(this.sprite);
     this.world.addBody(this.body);
@@ -39,15 +40,16 @@ class Ripple {
 
   step(d) {
     var deltaTime = d / this.ticker.FPS;
-    if (this.body.shapes[0].radius > this.maxRadius) {
+    var maxRadius = maxRadiuses[this.type];
+    if (this.body.shapes[0].radius > maxRadius) {
       // TODO remove ripple from world and stage and remove this listener
       this.stage.removeChild(this.sprite);
       return null;
     }
 
-    var p = ease(this.t / animationTime);
+    var p = ease(this.t / maxRadius);
     var [ x, y ] = this.body.position;
-    var newRadius = p * this.maxRadius;
+    var newRadius = p * maxRadius;
     this.body.shapes[0].radius = newRadius;
     this.sprite.clear();
     this.drawSprite(1 - p);

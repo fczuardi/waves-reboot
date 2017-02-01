@@ -1,6 +1,6 @@
 ## Quarta 1 Fev
 
-- [ ] replace old onclick with ripple creation on mouse position
+- [x] replace old onclick with ripple creation on mouse position
 - [ ] make sure ripples are drawn in a layer below the boats
 - [ ] make ripples add impulse to boats when they collide
 - [ ] move camera and boat stuff out of thee main loop into step functions inside each class
