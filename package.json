@@ -7,7 +7,7 @@
   "author": "Fabricio C Zuardi <fabricio@fabricio.org>",
   "license": "AGPL-3",
   "scripts": {
-    "start": "budo --live index.js",
+    "start": "budo index.js --live",
     "format": "prettier --write",
     "mkdir": "node tasks/mkdir.js",
     "build": "browserify index.js --outfile dist/bundle.js"
