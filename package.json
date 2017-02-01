@@ -7,10 +7,11 @@
   "author": "Fabricio C Zuardi <fabricio@fabricio.org>",
   "license": "AGPL-3.0",
   "scripts": {
-    "start": "budo index.js --live",
+    "start": "budo index.js --live --force-default-index --dir docs",
     "format": "prettier --write",
     "mkdir": "node tasks/mkdir.js",
-    "build": "browserify index.js --outfile dist/bundle.js"
+    "build": "browserify index.js --outfile docs/bundle.js",
+    "start:build": "budo --dir docs"
   },
   "devDependencies": {
     "browserify": "^14.0.0",

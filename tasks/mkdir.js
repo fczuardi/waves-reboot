@@ -1,4 +1,4 @@
 require('shelljs/global');
 
-mkdir('-p', './dist');
+mkdir('-p', './docs');
 
