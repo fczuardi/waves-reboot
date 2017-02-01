@@ -38,7 +38,7 @@ class Ripple {
   }
 
   step(d) {
-  var deltaTime = d / this.ticker.FPS;
+    var deltaTime = d / this.ticker.FPS;
     if (this.body.shapes[0].radius > this.maxRadius) {
       // TODO remove ripple from world and stage and remove this listener
       this.stage.removeChild(this.sprite);
