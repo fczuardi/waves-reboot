@@ -25,7 +25,7 @@ class Camera {
       return null;
     }
     var p = ease(this.t / stageCenteringTime);
-    var [ deltaX, deltaY ] = this.deltaCenter(this.subject, this.stage);
+    var [deltaX, deltaY] = this.deltaCenter(this.subject, this.stage);
 
     this.stage.setTransform(
       this.stageX0 + deltaX * p,
@@ -39,8 +39,8 @@ class Camera {
   // of how much the stage should move to end up
   // displaying this body in the center of the screen
   deltaCenter() {
-    var [ screenCenterX, screenCenterY ] = screenCenter();
-    var [ bodyX, bodyY ] = this.subject.interpolatedPosition;
+    var [screenCenterX, screenCenterY] = screenCenter();
+    var [bodyX, bodyY] = this.subject.interpolatedPosition;
     return [
       screenCenterX - bodyX - this.stageX0,
       screenCenterY - bodyY - this.stageY0
@@ -50,7 +50,7 @@ class Camera {
 
 // gets the coordinates for the center of the screen
 function screenCenter() {
-  return [ window.screen.width / 2, window.screen.height / 2 ];
+  return [window.screen.width / 2, window.screen.height / 2];
 }
 
 module.exports = Camera;
