@@ -11,7 +11,7 @@ var { view, stage, renderer, ticker } = new Application();
 
 //p2
 // gravity 0 world to simulate a top view of our lake
-var world = new World({ gravity: [ 0, 0 ] });
+var world = new World({ gravity: [0, 0] });
 world.sleepMode = World.BODY_SLEEPING;
 
 // debug background
@@ -29,15 +29,18 @@ world.on("beginContact", function(payload) {
 
 var boat = new Boat({ stage, world });
 var boat2 = new Boat({ x: 100, stage, world });
-var boats = [ boat, boat2 ];
+var boats = [boat, boat2];
 
 var camera = new Camera(stage, boat.body);
 
 function onClick(e) {
   var x = e.clientX - stage.x;
   var y = e.clientY - stage.y;
-  var i = [ Math.floor(Math.random() * 3) ];
-  var ripple = new Ripple(x, y, i, ticker, stage, world);
+  var i = [Math.floor(Math.random() * 3)];
+  var ripples = [];
+  for (var j = i; j >= 0; j--) {
+    ripples.push(new Ripple(x, y, j, ticker, stage, world));
+  }
 }
 
 var fixedTimeStep = 1 / 60;
@@ -58,7 +61,7 @@ ticker.add(function step(t) {
   var deltaTime = 1000 * t / ticker.FPS;
   world.step(fixedTimeStep, deltaTime);
   boats.forEach(function updateSpritePosition(boat) {
-    var [ x, y ] = boat.body.interpolatedPosition;
+    var [x, y] = boat.body.interpolatedPosition;
     boat.sprite.setTransform(x, y, 1, 1, boat.body.angle);
   });
 
@@ -90,5 +93,6 @@ document.body.appendChild(view);
 resizeCanvas();
 window.addEventListener("resize", function(e) {
   resizeCanvas();
+  camera.startCameraFollow();
 });
 window.addEventListener("click", onClick.bind({ stage, ticker, world }));
