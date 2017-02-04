@@ -5,23 +5,26 @@ var Boat = require("./src/boat");
 var Ripple = require("./src/ripple");
 var Camera = require("./src/camera");
 
-var { Graphics, Application, Sprite } = Pixi;
+var { DisplayObjectContainer, Application, Sprite } = Pixi;
 var { World, Body } = P2;
 
 var { view, stage, renderer, ticker } = new Application();
 
 //p2
 // gravity 0 world to simulate a top view of our lake
-var world = new World({ gravity: [ 0, 0 ] });
+var world = new World({ gravity: [0, 0] });
 world.sleepMode = World.BODY_SLEEPING;
 
 // debug background
-var bg = new Sprite.fromImage("./bg.png");
+var bg = new Sprite.fromImage("./bg.jpg");
 bg.anchor.x = 0.5;
 bg.anchor.y = 0.5;
 bg.setTransform(0, 0, 1, 1);
+// bg.setTransform(0, 0, 0.2, 0.2);
 
-stage.addChild(bg);
+var bgContainer = new DisplayObjectContainer();
+bgContainer.addChild(bg);
+stage.addChild(bgContainer);
 
 world.on("beginContact", function(payload) {
   console.log({ payload });
@@ -30,15 +33,19 @@ world.on("beginContact", function(payload) {
 
 var boat = new Boat({ stage, world });
 var boat2 = new Boat({ x: 100, stage, world });
-var boats = [ boat, boat2 ];
+var boats = [boat, boat2];
 
 var camera = new Camera(stage, boat.body);
+
+var ripples = [];
 
 function onClick(e) {
   var x = e.clientX - stage.x;
   var y = e.clientY - stage.y;
-  var i = [ Math.floor(Math.random() * 3) ];
-  var ripple = new Ripple(x, y, i, ticker, stage, world);
+  var i = [Math.floor(Math.random() * 3)];
+  for (var j = i; j >= 0; j--) {
+    ripples.push(new Ripple(x, y, j, ticker, bgContainer, world));
+  }
 }
 
 var fixedTimeStep = 1 / 60;
@@ -59,7 +66,7 @@ ticker.add(function step(t) {
   var deltaTime = 1000 * t / ticker.FPS;
   world.step(fixedTimeStep, deltaTime);
   boats.forEach(function updateSpritePosition(boat) {
-    var [ x, y ] = boat.body.interpolatedPosition;
+    var [x, y] = boat.body.interpolatedPosition;
     boat.sprite.setTransform(x, y, 1, 1, boat.body.angle);
   });
 
@@ -91,6 +98,7 @@ document.body.appendChild(view);
 resizeCanvas();
 window.addEventListener("resize", function(e) {
   resizeCanvas();
+  camera.startCameraFollow();
 });
 window.addEventListener("click", onClick.bind({ stage, ticker, world }));
 
@@ -50659,8 +50667,8 @@ var defaultImage = "./boat-small.png";
 
 var Boat = function({ image, x, y, stage, world } = {}) {
   var sprite = new Sprite.fromImage(image || defaultImage);
-  var body = new Body({ mass: 1, position: [ x || 0, y || 0 ] });
-  var polygon = [ [ -24, -4 ], [ 0, -46 ], [ 25, 6 ], [ 2, 44 ] ];
+  var body = new Body({ mass: 1, position: [x || 0, y || 0] });
+  var polygon = [[-24, -4], [0, -46], [25, 6], [2, 44]];
   sprite.anchor.x = 0.5;
   sprite.anchor.y = 0.5;
   body.fromPolygon(polygon);
@@ -50705,7 +50713,7 @@ class Camera {
       return null;
     }
     var p = ease(this.t / stageCenteringTime);
-    var [ deltaX, deltaY ] = this.deltaCenter(this.subject, this.stage);
+    var [deltaX, deltaY] = this.deltaCenter(this.subject, this.stage);
 
     this.stage.setTransform(
       this.stageX0 + deltaX * p,
@@ -50719,8 +50727,8 @@ class Camera {
   // of how much the stage should move to end up
   // displaying this body in the center of the screen
   deltaCenter() {
-    var [ screenCenterX, screenCenterY ] = screenCenter();
-    var [ bodyX, bodyY ] = this.subject.interpolatedPosition;
+    var [screenCenterX, screenCenterY] = screenCenter();
+    var [bodyX, bodyY] = this.subject.interpolatedPosition;
     return [
       screenCenterX - bodyX - this.stageX0,
       screenCenterY - bodyY - this.stageY0
@@ -50730,7 +50738,7 @@ class Camera {
 
 // gets the coordinates for the center of the screen
 function screenCenter() {
-  return [ window.screen.width / 2, window.screen.height / 2 ];
+  return [window.screen.width / 2, window.screen.height / 2];
 }
 
 module.exports = Camera;
@@ -50741,39 +50749,45 @@ var Pixi = require("pixi.js");
 var P2 = require("p2");
 
 var { Body, Circle } = P2;
-var { Graphics } = Pixi;
+var { Sprite, filters, Graphics } = Pixi;
+var { DisplacementFilter } = filters;
 
-var maxRadiuses = [ 200, 400, 600 ];
-var animationTimes = [ 5, 6, 7 ];
+var maxRadiuses = [100, 200, 400];
+var animationTimes = [3, 6, 12];
+var lineWidths = [3, 6, 9];
 
 class Ripple {
   constructor(x, y, type, ticker, stage, world) {
-    var body = new Body({ collisionResponse: false, position: [ x, y ] });
+    var body = new Body({ collisionResponse: false, position: [x, y] });
     body.addShape(new Circle({ radius: 3 }));
-    var sprite = new Graphics();
+    var radius = maxRadiuses[type];
+    // debug
+    // var sprite = new Graphics()
+    // .lineStyle(lineWidths[type], 0x00ffff, 1)
+    // .drawCircle(0, 0, radius);
+    // sprite.rotation = Math.PI / 2;
+    var sprite = new Sprite.fromImage("./ripple_map.png");
+    sprite.anchor.set(0.5, 0.5);
+    sprite.position.set(x, y);
+    sprite.scale.set(0, 0);
     body.label = "Ripple";
     this.sprite = sprite;
     this.body = body;
     this.stage = stage;
     this.type = type;
+    this.speed = animationTimes[type];
     this.ticker = ticker;
     this.world = world;
     this.t = 0;
-    this.stage.addChild(this.sprite);
-    this.world.addBody(this.body);
-    ticker.add(this.step.bind(this));
-  }
 
-  drawSprite(alpha) {
-    this.sprite.clear();
-    this.sprite
-      .beginFill(0x00FFFF, alpha)
-      .drawCircle(
-        this.body.position[0],
-        this.body.position[1],
-        this.body.shapes[0].radius
-      )
-      .endFill();
+    this.stage.addChild(sprite);
+    this.world.addBody(this.body);
+    var newFilter = [new DisplacementFilter(this.sprite, 5)];
+    var newFilters = stage.filters
+      ? stage.filters.concat(newFilter)
+      : newFilter;
+    this.stage.filters = newFilters;
+    ticker.add(this.step.bind(this));
   }
 
   step(d) {
@@ -50785,13 +50799,14 @@ class Ripple {
       return null;
     }
 
-    var p = ease(this.t / maxRadius);
-    var [ x, y ] = this.body.position;
+    var p = ease(this.t / this.speed);
+    var [x, y] = this.body.position;
     var newRadius = p * maxRadius;
     this.body.shapes[0].radius = newRadius;
-    this.sprite.clear();
-    this.drawSprite(1 - p);
     this.t += deltaTime;
+    this.sprite.scale.set(p, p);
+    this.sprite.alpha = 1 - p;
+    // console.log({p})
   }
 }
 
