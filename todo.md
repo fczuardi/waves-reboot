@@ -1,9 +1,11 @@
-## Sexta 03 fev
+## Today
 
-- [ ] make ripples add impulse to boats when they collide
+- [x] use displacementFilter to make the ripples
 
 ## Later
 
+- [ ] delay second and third ripples for types 1 and 2
+- [ ] make ripples add impulse to boats when they collide
 - [ ] move camera and boat stuff out of thee main loop into step functions inside each class
 
 ## Quarta 1 Fev

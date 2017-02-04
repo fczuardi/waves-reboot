@@ -4,7 +4,7 @@ var Boat = require("./src/boat");
 var Ripple = require("./src/ripple");
 var Camera = require("./src/camera");
 
-var { Graphics, Application, Sprite } = Pixi;
+var { DisplayObjectContainer, Application, Sprite } = Pixi;
 var { World, Body } = P2;
 
 var { view, stage, renderer, ticker } = new Application();
@@ -15,12 +15,15 @@ var world = new World({ gravity: [0, 0] });
 world.sleepMode = World.BODY_SLEEPING;
 
 // debug background
-var bg = new Sprite.fromImage("./bg.png");
+var bg = new Sprite.fromImage("./bg.jpg");
 bg.anchor.x = 0.5;
 bg.anchor.y = 0.5;
 bg.setTransform(0, 0, 1, 1);
+// bg.setTransform(0, 0, 0.2, 0.2);
 
-stage.addChild(bg);
+var bgContainer = new DisplayObjectContainer();
+bgContainer.addChild(bg);
+stage.addChild(bgContainer);
 
 world.on("beginContact", function(payload) {
   console.log({ payload });
@@ -33,13 +36,14 @@ var boats = [boat, boat2];
 
 var camera = new Camera(stage, boat.body);
 
+var ripples = [];
+
 function onClick(e) {
   var x = e.clientX - stage.x;
   var y = e.clientY - stage.y;
   var i = [Math.floor(Math.random() * 3)];
-  var ripples = [];
   for (var j = i; j >= 0; j--) {
-    ripples.push(new Ripple(x, y, j, ticker, stage, world));
+    ripples.push(new Ripple(x, y, j, ticker, bgContainer, world));
   }
 }
 

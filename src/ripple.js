@@ -3,7 +3,8 @@ var Pixi = require("pixi.js");
 var P2 = require("p2");
 
 var { Body, Circle } = P2;
-var { Graphics } = Pixi;
+var { Sprite, filters, Graphics } = Pixi;
+var { DisplacementFilter } = filters;
 
 var maxRadiuses = [100, 200, 400];
 var animationTimes = [3, 6, 12];
@@ -14,11 +15,15 @@ class Ripple {
     var body = new Body({ collisionResponse: false, position: [x, y] });
     body.addShape(new Circle({ radius: 3 }));
     var radius = maxRadiuses[type];
-    var sprite = new Graphics()
-      .lineStyle(lineWidths[type], 0x00ffff, 1)
-      .drawCircle(0, 0, radius);
-    sprite.scale.set(0, 0);
+    // debug
+    // var sprite = new Graphics()
+    // .lineStyle(lineWidths[type], 0x00ffff, 1)
+    // .drawCircle(0, 0, radius);
+    // sprite.rotation = Math.PI / 2;
+    var sprite = new Sprite.fromImage("./ripple_map.png");
+    sprite.anchor.set(0.5, 0.5);
     sprite.position.set(x, y);
+    sprite.scale.set(0, 0);
     body.label = "Ripple";
     this.sprite = sprite;
     this.body = body;
@@ -28,8 +33,14 @@ class Ripple {
     this.ticker = ticker;
     this.world = world;
     this.t = 0;
-    this.stage.addChild(this.sprite);
+
+    this.stage.addChild(sprite);
     this.world.addBody(this.body);
+    var newFilter = [new DisplacementFilter(this.sprite, 5)];
+    var newFilters = stage.filters
+      ? stage.filters.concat(newFilter)
+      : newFilter;
+    this.stage.filters = newFilters;
     ticker.add(this.step.bind(this));
   }
 
