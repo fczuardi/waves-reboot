@@ -28,4 +28,5 @@
 
 ## Assets
 
+- https://unsplash.com/search/blue?photo=aHhhdKUP77M
 - https://openclipart.org/detail/165974/checkers-board
