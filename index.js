@@ -16,14 +16,19 @@ world.sleepMode = World.BODY_SLEEPING;
 
 // debug background
 var bg = new Sprite.fromImage("./bg.jpg");
-bg.anchor.x = 0.5;
-bg.anchor.y = 0.5;
+bg.anchor.set(0.5, 0.5);
 bg.setTransform(0, 0, 1, 1);
-// bg.setTransform(0, 0, 0.2, 0.2);
 
 var bgContainer = new DisplayObjectContainer();
 bgContainer.addChild(bg);
 stage.addChild(bgContainer);
+
+// debug displacementFilter
+// var debugSprite = new Sprite.fromImage("./debugmap.png");
+// debugSprite.anchor.set(0.5, 0.5);
+// debugSprite.position.set(-100, 0);
+// bgContainer.addChild(debugSprite);
+// bgContainer.filters = [new Pixi.filters.DisplacementFilter(debugSprite, -100)];
 
 world.on("beginContact", function(payload) {
   console.log({ payload });

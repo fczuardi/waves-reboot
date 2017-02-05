@@ -1,9 +1,11 @@
 ## Today
 
+- [x] understand better how displacement filter works
 - [x] remove ripple filter when it's animation end
 
 ## Later
 
+- [ ] tweak displacement filter to prevent the sudden bg move when filter is removed
 - [ ] delay second and third ripples for types 1 and 2
 - [ ] make ripples add impulse to boats when they collide
 - [ ] move camera and boat stuff out of thee main loop into step functions inside each class
