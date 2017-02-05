@@ -1,12 +1,16 @@
 ## Today
 
-- [x] use displacementFilter to make the ripples
+- [x] remove ripple filter when it's animation end
 
 ## Later
 
 - [ ] delay second and third ripples for types 1 and 2
 - [ ] make ripples add impulse to boats when they collide
 - [ ] move camera and boat stuff out of thee main loop into step functions inside each class
+
+## Sabado 04 Fev
+
+- [x] use displacementFilter to make the ripples
 
 ## Quarta 1 Fev
 

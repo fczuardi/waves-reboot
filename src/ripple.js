@@ -11,7 +11,7 @@ var animationTimes = [3, 6, 12];
 var lineWidths = [3, 6, 9];
 
 class Ripple {
-  constructor(x, y, type, ticker, stage, world) {
+  constructor(x, y, type, ticker, container, world) {
     var body = new Body({ collisionResponse: false, position: [x, y] });
     body.addShape(new Circle({ radius: 3 }));
     var radius = maxRadiuses[type];
@@ -27,32 +27,28 @@ class Ripple {
     body.label = "Ripple";
     this.sprite = sprite;
     this.body = body;
-    this.stage = stage;
+    this.container = container;
     this.type = type;
     this.speed = animationTimes[type];
     this.ticker = ticker;
     this.world = world;
     this.t = 0;
-
-    this.stage.addChild(sprite);
+    this.container.addChild(sprite);
     this.world.addBody(this.body);
     var newFilter = [new DisplacementFilter(this.sprite, 5)];
-    var newFilters = stage.filters
-      ? stage.filters.concat(newFilter)
+    var newFilters = container.filters
+      ? container.filters.concat(newFilter)
       : newFilter;
-    this.stage.filters = newFilters;
-    ticker.add(this.step.bind(this));
+    this.filterIndex = newFilters.length - 1;
+    this.filter = newFilter;
+    this.container.filters = newFilters;
+    this.stepFn = this.step.bind(this);
+    ticker.add(this.stepFn);
   }
 
   step(d) {
     var deltaTime = d / this.ticker.FPS;
     var maxRadius = maxRadiuses[this.type];
-    if (this.body.shapes[0].radius > maxRadius) {
-      // TODO remove ripple from world and stage and remove this listener
-      this.stage.removeChild(this.sprite);
-      return null;
-    }
-
     var p = ease(this.t / this.speed);
     var [x, y] = this.body.position;
     var newRadius = p * maxRadius;
@@ -60,7 +56,16 @@ class Ripple {
     this.t += deltaTime;
     this.sprite.scale.set(p, p);
     this.sprite.alpha = 1 - p;
-    // console.log({p})
+    if (p >= 1) {
+      // TODO remove ripple from world and container and remove this listener
+      this.container.removeChild(this.sprite);
+      var filters = this.container.filters.filter(
+        (f, index) => index !== this.filterIndex
+      );
+      this.container.filters = filters;
+      this.ticker.remove(this.stepFn);
+      return null;
+    }
   }
 }
 
