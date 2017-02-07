@@ -1,4 +1,3 @@
-require('shelljs/global');
+require("shelljs/global");
 
-mkdir('-p', './docs');
-
+mkdir("-p", "./docs");

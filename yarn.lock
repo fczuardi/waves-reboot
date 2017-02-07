@@ -1886,9 +1886,9 @@ prettier-bytes@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/prettier-bytes/-/prettier-bytes-1.0.3.tgz#932b31c23efddb36fc66a82dcef362af3122982f"
 
-prettier@^0.15.0:
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-0.15.0.tgz#732f200c66bad78ad54635c111c01eab5cb8c4ce"
+prettier@^0.16.0:
+  version "0.16.0"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-0.16.0.tgz#35d3df5672831b3622e44d88ab18c1f175d6d90c"
   dependencies:
     ast-types "0.9.4"
     babel-code-frame "6.22.0"
